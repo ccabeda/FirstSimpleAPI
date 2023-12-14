@@ -34,3 +34,7 @@ C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\obj\Debug\net8.0\refi
 C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\obj\Debug\net8.0\MiPrimeraAPI.pdb
 C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\obj\Debug\net8.0\MiPrimeraAPI.genruntimeconfig.cache
 C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\obj\Debug\net8.0\ref\MiPrimeraAPI.dll
+C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\cabed\OneDrive\Desktop\Curso\c_sharp\MiPrimeraAPI\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

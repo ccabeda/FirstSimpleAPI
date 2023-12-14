@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using MiPrimeraAPI.Data;
 using MiPrimeraAPI.Models;
@@ -71,7 +72,7 @@ namespace MiPrimeraAPI.Controllers
             return CreatedAtRoute("GetVilla", new { id = villa.Id }, villa); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
         }
 
-        [HttpDelete("id", Name = "DeleteVilla")] //damos como ruta la id del get primero
+        [HttpDelete("id", Name = "DeleteVilla")] //damos como ruta la id del get primero. delete para borrrar
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
@@ -82,7 +83,7 @@ namespace MiPrimeraAPI.Controllers
             {
                 return BadRequest();
             }
-            var villa = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //esto hace que, en la variable villa, se guarde el id del que queremos eliminar unicamente si se encuentra en la lista
+            var villa = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la lista
             //si no se encuentra, guarda un null
             if (villa == null) 
             {
@@ -93,6 +94,56 @@ namespace MiPrimeraAPI.Controllers
 
 
         }
+
+        [HttpPut("id", Name = "UpdateVilla")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
+
+        public IActionResult UpdateVillage(int id, [FromBody] VillaDto villa)
+        {
+            if (villa == null || id != villa.Id) //id que nos pasa diferente al del body que queremos borrar
+            {
+                return BadRequest();
+            }
+            var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
+            if (village == null) //si agregaron un id inexistente, hacemos una personalizada
+            {
+                ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
+                return BadRequest(ModelState); //retornamos la validacion 
+            }
+            village.Nombre = villa.Nombre;
+            village.Ciudad = villa.Ciudad;
+            village.Pais = villa.Pais; 
+            return NoContent();
+        }
+
+        //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
+
+        [HttpPatch("id", Name = "PatchVilla")] //creamos el patch
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
+
+        public IActionResult PatchVillage(int id, JsonPatchDocument<VillaDto> villa) //pedimos el id y el objeto en JSON con lo que quiere actualizar
+        {
+            if (villa == null || id == 0) //verifico que la id no sea 0 o que el json sea null
+            {
+                return BadRequest();
+            }
+            var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
+            if (village == null) //si la id no esta registrada
+            {
+                ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
+                return BadRequest(ModelState); //retornamos la validacion 
+            }
+            villa.ApplyTo(village, ModelState); //aplicamos los cambios del json al objeto
+            if (!ModelState.IsValid) //si no es valido el modelo que siguio
+            {
+                return BadRequest(ModelState);
+            }
+
+            return NoContent();
+        }
+
 
 
 
