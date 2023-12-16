@@ -11,12 +11,22 @@ namespace MiPrimeraAPI.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
+        //creamos logger.
+        private readonly ILogger<VillaController> _logger; //readonly unicamente para que se lea y no se cambie
+        public VillaController(ILogger<VillaController> logger)
+        {
+            _logger = logger;
+        }
+
+
+
         [HttpGet]//es una operacion GET
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
 
         public ActionResult <IEnumerable<VillaDto>> GetVillas() //Queremos que nos devuelva una lista de las villas
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
+            _logger.LogInformation("Lista de todas las villas disponibles."); //logger de información
             return Ok(Villa_Database.Database_Villa); //llamo a la "database". Aqui retornamos el estado Ok ya que es lo correcto 
         }
 
@@ -30,13 +40,16 @@ namespace MiPrimeraAPI.Controllers
         {
             if (id == 0) 
             {
+                _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest(); //si el id ingresado es 0, nos dara el error             
             }
             var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id);// con la funcion LINQ y un lamda agarramos la villa con la id que ingrese
             if (village == null) 
             {
+                _logger.LogWarning("No es posible encontrar la villa de id " + id + "."); //logger de warning
                 return NotFound(); //si el id que ingreso no esta (es null) que reciba not found
             }
+            _logger.LogInformation("Información de la villa solicitada.");
             return Ok(village); //retornamos la villa 
         }
 
@@ -50,6 +63,7 @@ namespace MiPrimeraAPI.Controllers
             //validacion tradicional 
             if(!ModelState.IsValid) //al poner los [required] o [max.lenght] verificamos que se cumplan todos, sino error 400
             {
+                _logger.LogError("Error al ingresar los datos.");
                 return BadRequest(ModelState);
             } 
             //validacion personalizada
@@ -57,18 +71,22 @@ namespace MiPrimeraAPI.Controllers
              //si el resultado de la busqueda es !null, significa que encontro un nombre igual.
             {
                 ModelState.AddModelError("NameAlreadyExist.", "El nombre que intenta ingresar ya esta registrado."); //creamos la validacion con su nombre y lo que queremos que aparezca
+                _logger.LogError("La villa que intenta ingresar ya esta registrada.");
                 return BadRequest(ModelState); //retornamos la validacion 
             }
             if (villa == null) //si la villa esta vacia retorna error 400
             {
+                _logger.LogError("Error al ingresar los datos.");
                 return BadRequest(villa);
             }
             if (villa.Id < 0 || villa.Id > 0) //si se le quiso agregar id (se agrega solo) error 500 interno
             {
+                _logger.LogError("Error al ingresar los datos.No debe elegir el campo ID.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             villa.Id = Villa_Database.Database_Villa.OrderByDescending(v => v.Id).FirstOrDefault().Id+1; //obtenemos la id mas alta y le sumamos 1 para agregarla
-            Villa_Database.Database_Villa.Add(villa); //la agregamos
+            Villa_Database.Database_Villa.Add(villa); //la
+            _logger.LogInformation("Agregando nueva villa...");
             return CreatedAtRoute("GetVilla", new { id = villa.Id }, villa); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
         }
 
@@ -81,15 +99,18 @@ namespace MiPrimeraAPI.Controllers
         {
             if(id ==0) //si es cero badrequest
             {
+                _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest();
             }
             var villa = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la lista
             //si no se encuentra, guarda un null
             if (villa == null) 
             {
+                _logger.LogError("Los datos ingresados no coindicen con una villa registrada."); //logger de error
                 return NotFound();            
             }
             Villa_Database.Database_Villa.Remove(villa); //removemos la villa indicada por el id
+            _logger.LogInformation("Villa eliminada con exito.");
             return NoContent(); //siempre en los DELETE retornar NoContent 
 
 
