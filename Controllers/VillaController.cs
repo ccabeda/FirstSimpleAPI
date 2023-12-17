@@ -13,9 +13,11 @@ namespace MiPrimeraAPI.Controllers
     {
         //creamos logger.
         private readonly ILogger<VillaController> _logger; //readonly unicamente para que se lea y no se cambie
-        public VillaController(ILogger<VillaController> logger)
+        private readonly AplicationDbContext _db; //traemos el contexto a los controladores para usar con la base de datos
+        public VillaController(ILogger<VillaController> logger, AplicationDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
 
@@ -27,7 +29,7 @@ namespace MiPrimeraAPI.Controllers
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
             _logger.LogInformation("Lista de todas las villas disponibles."); //logger de información
-            return Ok(Villa_Database.Database_Villa); //llamo a la "database". Aqui retornamos el estado Ok ya que es lo correcto 
+            return Ok(_db.villas.ToList()); //seria como hacer (select * from villas).
         }
 
         [HttpGet("id", Name = "GetVilla")] //otra peticion GET, agregamos el id para cambiarle la ruta. Ponemos nombre para el POST. 
@@ -43,7 +45,7 @@ namespace MiPrimeraAPI.Controllers
                 _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest(); //si el id ingresado es 0, nos dara el error             
             }
-            var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id);// con la funcion LINQ y un lamda agarramos la villa con la id que ingrese
+            var village = _db.villas.FirstOrDefault(x => x.Id == id); //que revise en la base de datos, y agarre la que ocntenga el mismo Id
             if (village == null) 
             {
                 _logger.LogWarning("No es posible encontrar la villa de id " + id + "."); //logger de warning
@@ -67,7 +69,7 @@ namespace MiPrimeraAPI.Controllers
                 return BadRequest(ModelState);
             } 
             //validacion personalizada
-            if (Villa_Database.Database_Villa.FirstOrDefault(v => v.Nombre.ToUpper() == villa.Nombre.ToUpper()) != null) //buscamos en la base de datos si hay un nombre igual al ingresado.
+            if (_db.villas.FirstOrDefault(v => v.Nombre.ToUpper() == villa.Nombre.ToUpper()) != null) //buscamos en la base de datos si hay un nombre igual al ingresado.
              //si el resultado de la busqueda es !null, significa que encontro un nombre igual.
             {
                 ModelState.AddModelError("NameAlreadyExist.", "El nombre que intenta ingresar ya esta registrado."); //creamos la validacion con su nombre y lo que queremos que aparezca
@@ -76,16 +78,25 @@ namespace MiPrimeraAPI.Controllers
             }
             if (villa == null) //si la villa esta vacia retorna error 400
             {
-                _logger.LogError("Error al ingresar los datos.");
+                _logger.LogWarning("Error al ingresar los datos.");
                 return BadRequest(villa);
             }
             if (villa.Id < 0 || villa.Id > 0) //si se le quiso agregar id (se agrega solo) error 500 interno
             {
-                _logger.LogError("Error al ingresar los datos.No debe elegir el campo ID.");
+                _logger.LogWarning("Error al ingresar los datos.No debe elegir el campo ID.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            villa.Id = Villa_Database.Database_Villa.OrderByDescending(v => v.Id).FirstOrDefault().Id+1; //obtenemos la id mas alta y le sumamos 1 para agregarla
-            Villa_Database.Database_Villa.Add(villa); //la
+            Villa modelo = new() 
+            { 
+                Nombre = villa.Nombre,
+                Ciudad = villa.Ciudad,
+                Pais = villa.Pais,
+                ImagenURL = villa.ImagenURL,
+                 Amenidad = villa.Amenidad
+            }; //creamos la villa
+
+            _db.villas.Add(modelo); //la agregamos a l abase de datos en la tabla correspondiente
+            _db.SaveChanges(); //SIEMPRE GUARDAR CAMBIOS PARA MODIFICAR ALGO 
             _logger.LogInformation("Agregando nueva villa...");
             return CreatedAtRoute("GetVilla", new { id = villa.Id }, villa); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
         }
@@ -102,14 +113,15 @@ namespace MiPrimeraAPI.Controllers
                 _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest();
             }
-            var villa = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la lista
+            var villa = _db.villas.FirstOrDefault(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la db
             //si no se encuentra, guarda un null
             if (villa == null) 
             {
                 _logger.LogError("Los datos ingresados no coindicen con una villa registrada."); //logger de error
                 return NotFound();            
             }
-            Villa_Database.Database_Villa.Remove(villa); //removemos la villa indicada por el id
+            _db.villas.Remove(villa); //borramos la villa de la db
+            _db.SaveChanges(); //GUARDAMOS CAMBIOS 
             _logger.LogInformation("Villa eliminada con exito.");
             return NoContent(); //siempre en los DELETE retornar NoContent 
 
@@ -119,22 +131,32 @@ namespace MiPrimeraAPI.Controllers
         [HttpPut("id", Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
 
         public IActionResult UpdateVillage(int id, [FromBody] VillaDto villa)
         {
-            if (villa == null || id != villa.Id) //id que nos pasa diferente al del body que queremos borrar
+            if (villa == null || id != villa.Id)
             {
                 return BadRequest();
             }
-            var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
-            if (village == null) //si agregaron un id inexistente, hacemos una personalizada
+
+            var village = _db.villas.FirstOrDefault(v => v.Id == id);
+
+            if (village == null)
             {
-                ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
-                return BadRequest(ModelState); //retornamos la validacion 
+                return NotFound(); // Retorna NotFound si el ID no existe en la base de datos
             }
+
+            // Actualizamos las propiedades de la villa existente con los valores del DTO
             village.Nombre = villa.Nombre;
             village.Ciudad = villa.Ciudad;
-            village.Pais = villa.Pais; 
+            village.Pais = villa.Pais;
+            village.ImagenURL = villa.ImagenURL;
+            village.Amenidad = villa.Amenidad;
+
+            _db.Update(village); // Actualizamos la villa existente en el contexto
+            _db.SaveChanges(); // Guardamos los cambios
+
             return NoContent();
         }
 
@@ -150,17 +172,35 @@ namespace MiPrimeraAPI.Controllers
             {
                 return BadRequest();
             }
-            var village = Villa_Database.Database_Villa.FirstOrDefault(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
+            var village = _db.villas.FirstOrDefault(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
             if (village == null) //si la id no esta registrada
             {
                 ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
                 return BadRequest(ModelState); //retornamos la validacion 
             }
-            villa.ApplyTo(village, ModelState); //aplicamos los cambios del json al objeto
+            VillaDto villadto = new() 
+            { 
+                Nombre = village.Nombre,
+                Ciudad = village.Ciudad,
+                Pais = village.Pais,
+                ImagenURL = village.ImagenURL,
+                Amenidad = village.Amenidad 
+            }; //creamos dto con las variables del objeto a actualizar 
+
+            villa.ApplyTo(villadto, ModelState); //aplicamos los cambios del json al objeto
             if (!ModelState.IsValid) //si no es valido el modelo que siguio
             {
                 return BadRequest(ModelState);
             }
+            village.Nombre = villadto.Nombre; //actualizamos el objeto con las config del json 
+            village.Ciudad = villadto.Ciudad;
+            village.Pais = villadto.Pais;
+            village.ImagenURL = villadto.ImagenURL;
+            village.Amenidad = villadto.Amenidad;
+
+            _db.villas.Update(village); //acutalizo y guardo 
+            _db.SaveChanges();
+
 
             return NoContent();
         }
