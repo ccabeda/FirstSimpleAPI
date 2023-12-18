@@ -60,7 +60,7 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] //documentamos el estado 500
 
-        public ActionResult<VillaDto> NewVillage([FromBody] VillaDto villa)
+        public ActionResult<VillaDto> NewVillage([FromBody] VillaCreateDto villa)
         {
             //validacion tradicional 
             if(!ModelState.IsValid) //al poner los [required] o [max.lenght] verificamos que se cumplan todos, sino error 400
@@ -81,11 +81,6 @@ namespace MiPrimeraAPI.Controllers
                 _logger.LogWarning("Error al ingresar los datos.");
                 return BadRequest(villa);
             }
-            if (villa.Id < 0 || villa.Id > 0) //si se le quiso agregar id (se agrega solo) error 500 interno
-            {
-                _logger.LogWarning("Error al ingresar los datos.No debe elegir el campo ID.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
             Villa modelo = new() 
             { 
                 Nombre = villa.Nombre,
@@ -98,7 +93,7 @@ namespace MiPrimeraAPI.Controllers
             _db.villas.Add(modelo); //la agregamos a l abase de datos en la tabla correspondiente
             _db.SaveChanges(); //SIEMPRE GUARDAR CAMBIOS PARA MODIFICAR ALGO 
             _logger.LogInformation("Agregando nueva villa...");
-            return CreatedAtRoute("GetVilla", new { id = villa.Id }, villa); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
+            return CreatedAtRoute("GetVilla", new { id = modelo.Id }, villa); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
         }
 
         [HttpDelete("id", Name = "DeleteVilla")] //damos como ruta la id del get primero. delete para borrrar
@@ -133,7 +128,7 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
 
-        public IActionResult UpdateVillage(int id, [FromBody] VillaDto villa)
+        public IActionResult UpdateVillage(int id, [FromBody] VillaUpdateDto villa)
         {
             if (villa == null || id != villa.Id)
             {
@@ -166,7 +161,7 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
 
-        public IActionResult PatchVillage(int id, JsonPatchDocument<VillaDto> villa) //pedimos el id y el objeto en JSON con lo que quiere actualizar
+        public IActionResult PatchVillage(int id, JsonPatchDocument<VillaUpdateDto> villa) //pedimos el id y el objeto en JSON con lo que quiere actualizar
         {
             if (villa == null || id == 0) //verifico que la id no sea 0 o que el json sea null
             {
@@ -178,7 +173,7 @@ namespace MiPrimeraAPI.Controllers
                 ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
                 return BadRequest(ModelState); //retornamos la validacion 
             }
-            VillaDto villadto = new() 
+            VillaUpdateDto villadto = new() 
             { 
                 Nombre = village.Nombre,
                 Ciudad = village.Ciudad,
