@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MiPrimeraAPI;
 using MiPrimeraAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<AplicationDbContext>(option => //Aquí se establece
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddAutoMapper(typeof(AutomapperConfig)); //PASO 2 AUTOMAPPER. Agregar la configuracion de la clase automapper al servicio.
 
 var app = builder.Build();
 

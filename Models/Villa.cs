@@ -13,8 +13,8 @@ namespace MiPrimeraAPI.Models
         public required string Nombre { get; set; }
         public required string Ciudad { get; set; }
         public required string Pais { get; set; }
-        public required string ImagenURL { get; set; }
-        public required string Amenidad { get; set; }   
+        public  string  ImagenURL { get; set; }
+        public  string Amenidad { get; set; }   
         public DateTime FechaDeCareación { get; set; }
         public DateTime FechaDeActualización { get; set; }
 
