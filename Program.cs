@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MiPrimeraAPI;
 using MiPrimeraAPI.Data;
+using MiPrimeraAPI.Repository;
+using MiPrimeraAPI.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,15 @@ builder.Services.AddDbContext<AplicationDbContext>(option => //Aquí se establece
 });
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig)); //PASO 2 AUTOMAPPER. Agregar la configuracion de la clase automapper al servicio.
+
+
+//SCOPED: Se crean cada vez que se necesitan y se destruyen
+//SINGLETON: Una vez que se crea una instancia se utiliza esa para siempre
+//TRANSITED: Servicios transitorios. Se crean cada vez que se necesitan.
+
+builder.Services.AddScoped<IVillageRepository, VillageRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las villas 
+
+
 
 var app = builder.Build();
 

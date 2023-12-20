@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MiPrimeraAPI.Data;
 using MiPrimeraAPI.Models;
 using MiPrimeraAPI.Models.DTO;
+using MiPrimeraAPI.Repository.IRepository;
 
 namespace MiPrimeraAPI.Controllers
 {
@@ -15,12 +16,12 @@ namespace MiPrimeraAPI.Controllers
     {
         //creamos logger.
         private readonly ILogger<VillaController> _logger; //readonly unicamente para que se lea y no se cambie
-        private readonly AplicationDbContext _db; //traemos el contexto a los controladores para usar con la base de datos
+        private readonly IVillageRepository _villaRepositorio; //traemos el contexto a los controladores para usar con la base de datos
         private readonly IMapper _mapper; // traemos el mapper para utilizar aqui 
-        public VillaController(ILogger<VillaController> logger, AplicationDbContext db, IMapper mapper)
+        public VillaController(ILogger<VillaController> logger, IVillageRepository villaRepositorio, IMapper mapper)
         {
             _logger = logger;
-            _db = db;
+            _villaRepositorio = villaRepositorio;
             _mapper = mapper;
         }
 
@@ -33,7 +34,7 @@ namespace MiPrimeraAPI.Controllers
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
             _logger.LogInformation("Lista de todas las villas disponibles."); //logger de información
-            IEnumerable<Villa> lista_villas = await _db.villas.ToListAsync();  //cargo la lista de villas
+            IEnumerable<Villa> lista_villas = await _villaRepositorio.ObtenerTodos();  //cargo la lista de villas
             return Ok(_mapper.Map<IEnumerable<VillaDto>>(lista_villas)); //seria como hacer (select * from villas). mapeo la lista a villaDTO
         }
 
@@ -50,7 +51,7 @@ namespace MiPrimeraAPI.Controllers
                 _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest(); //si el id ingresado es 0, nos dara el error             
             }
-            var village = await _db.villas.FirstOrDefaultAsync(x => x.Id == id); //que revise en la base de datos, y agarre la que ocntenga el mismo Id
+            var village = await _villaRepositorio.Obtener(x => x.Id == id); //que revise en la base de datos, y agarre la que ocntenga el mismo Id
             if (village == null) 
             {
                 _logger.LogWarning("No es posible encontrar la villa de id " + id + "."); //logger de warning
@@ -74,7 +75,7 @@ namespace MiPrimeraAPI.Controllers
                 return BadRequest(ModelState);
             } 
             //validacion personalizada
-            if (await _db.villas.FirstOrDefaultAsync(v => v.Nombre.ToUpper() == CreatevillaDTO.Nombre.ToUpper()) != null) //buscamos en la base de datos si hay un nombre igual al ingresado.
+            if (await _villaRepositorio.Obtener(v => v.Nombre.ToUpper() == CreatevillaDTO.Nombre.ToUpper()) != null) //buscamos en la base de datos si hay un nombre igual al ingresado.
              //si el resultado de la busqueda es !null, significa que encontro un nombre igual.
             {
                 ModelState.AddModelError("NameAlreadyExist.", "El nombre que intenta ingresar ya esta registrado."); //creamos la validacion con su nombre y lo que queremos que aparezca
@@ -96,9 +97,7 @@ namespace MiPrimeraAPI.Controllers
             //}; //creamos la villa
 
             Villa modelo = _mapper.Map<Villa>(CreatevillaDTO); //mapeamos la villa a crear del dto enviado
-
-            await _db.villas.AddAsync(modelo); //la agregamos a la base de datos en la tabla correspondiente
-            await _db.SaveChangesAsync(); //SIEMPRE GUARDAR CAMBIOS PARA MODIFICAR ALGO 
+            await _villaRepositorio.Agregar(modelo); //la agregamos a la base de datos en la tabla correspondiente
             _logger.LogInformation("Agregando nueva villa...");
             return CreatedAtRoute("GetVilla", new { id = modelo.Id }, modelo); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
         }
@@ -115,15 +114,14 @@ namespace MiPrimeraAPI.Controllers
                 _logger.LogError("No es posible encontrar la villa de id " + id + "."); //logger de error
                 return BadRequest();
             }
-            var villa = await _db.villas.FirstOrDefaultAsync(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la db
+            var villa = await _villaRepositorio.Obtener(v => v.Id == id); //esto hace que, en la variable villa, se guarde el objeto que queremos eliminar unicamente si se encuentra en la db
             //si no se encuentra, guarda un null
             if (villa == null) 
             {
                 _logger.LogError("Los datos ingresados no coindicen con una villa registrada."); //logger de error
                 return NotFound();            
             }
-            _db.villas.Remove(villa); //borramos la villa de la db
-            await _db.SaveChangesAsync(); //GUARDAMOS CAMBIOS 
+            await _villaRepositorio.Eliminar(villa); //borramos la villa de la db
             _logger.LogInformation("Villa eliminada con exito.");
             return NoContent(); //siempre en los DELETE retornar NoContent 
 
@@ -142,8 +140,7 @@ namespace MiPrimeraAPI.Controllers
                 return BadRequest();
             }
 
-            var village = await _db.villas.FirstOrDefaultAsync(v => v.Id == id); //buscamos si hay una villa con el mismo id en la db
-
+            var village = await _villaRepositorio.Obtener(v => v.Id == id, tracked:false); //buscamos si hay una villa con el mismo id en la db pero sin trackearla (**sin tracked:false NO FUNCIONA**)
             if (village == null)
             {
                 return NotFound(); // Retorna NotFound si el ID no existe en la base de datos
@@ -151,10 +148,7 @@ namespace MiPrimeraAPI.Controllers
 
             // Si existe id a actualizar, mapeamos el modelo con los datos del villaDTO
             Villa modelo = _mapper.Map<Villa>(UpdatevillaDTO);
-
-            _db.Update(modelo); // Actualizamos la villa existente en el contexto
-            await _db.SaveChangesAsync(); // Guardamos los cambios
-
+            await _villaRepositorio.Actualizar(modelo); // Actualizamos la villa existente en el contexto
             return NoContent();
         }
 
@@ -170,7 +164,7 @@ namespace MiPrimeraAPI.Controllers
             {
                 return BadRequest();
             }
-            var village = await _db.villas.FirstOrDefaultAsync(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
+            var village = await _villaRepositorio.Obtener(v => v.Id == id); //guardamos el objeto que queremos actualizar o un null
             if (village == null) //si la id no esta registrada
             {
                 ModelState.AddModelError("IDNotExist.", "El ID del usuario que intenta actualizar no esta registrado en la lista."); //creamos la validacion con su nombre y lo que queremos que aparezca
@@ -188,10 +182,7 @@ namespace MiPrimeraAPI.Controllers
 
             _mapper.Map(villaDTO, village); 
 
-            _db.villas.Update(village); //acutalizo y guardo 
-            await _db.SaveChangesAsync(); //agrego asincronia a los metodos
-
-
+            await _villaRepositorio.Actualizar(village); //acutalizo y guardo 
             return NoContent();
         }
 
