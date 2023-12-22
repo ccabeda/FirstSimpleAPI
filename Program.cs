@@ -29,7 +29,7 @@ builder.Services.AddAutoMapper(typeof(AutomapperConfig)); //PASO 2 AUTOMAPPER. A
 //TRANSITED: Servicios transitorios. Se crean cada vez que se necesitan.
 
 builder.Services.AddScoped<IVillageRepository, VillageRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las villas 
-
+builder.Services.AddScoped<INumberVillageRepository, NumberVillageRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las numbervillas 
 
 
 var app = builder.Build();

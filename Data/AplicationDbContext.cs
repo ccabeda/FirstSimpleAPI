@@ -15,17 +15,22 @@ namespace MiPrimeraAPI.Data
 
         public DbSet<Villa> villas { get; set; } //creamos la tabla de villas con DbSet
 
+        public DbSet<NumberVilla> NumeroVillas { get; set; }
+
 
         //Funcion de Entity para crear datos precargados en la Db a la hora de crearla o hacer la migración, asi no comienza la Db vacia.
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
-                new Villa{Id= 1, Nombre= "Edificio en la ciudad", Ciudad= "Buenos Aires", Pais= "Argentina", ImagenURL="", Amenidad="", FechaDeCareación= DateTime.Now, FechaDeActualización= DateTime.Now},
-                new Villa{Id= 2, Nombre= "Casa en la playa", Ciudad= "Ibiza", Pais= "España", ImagenURL ="", Amenidad="", FechaDeCareación= DateTime.Now, FechaDeActualización= DateTime.Now},
-                new Villa{Id= 3, Nombre= "Cabaña en las montañas", Ciudad= "Mendoza", Pais= "Argentina", ImagenURL="", Amenidad= "", FechaDeCareación= DateTime.Now, FechaDeActualización= DateTime.Now}
-            );
+                new Villa { Id = 1, Nombre = "Edificio en la ciudad", Ciudad = "Buenos Aires", Pais = "Argentina", ImagenURL = "", Amenidad = "", FechaDeCreación = DateTime.Now, FechaDeActualización = DateTime.Now },
+                new Villa { Id = 2, Nombre = "Casa en la playa", Ciudad = "Ibiza", Pais = "España", ImagenURL = "", Amenidad = "", FechaDeCreación = DateTime.Now, FechaDeActualización = DateTime.Now },
+                new Villa { Id = 3, Nombre = "Cabaña en las montañas", Ciudad = "Mendoza", Pais = "Argentina", ImagenURL = "", Amenidad = "", FechaDeCreación = DateTime.Now, FechaDeActualización = DateTime.Now }
+                );
+
+
         }
+            
 
 
 

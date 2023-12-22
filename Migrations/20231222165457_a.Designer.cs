@@ -4,6 +4,7 @@ using MiPrimeraAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiPrimeraAPI.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    partial class AplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222165457_a")]
+    partial class a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,8 +93,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 1,
                             Amenidad = "",
                             Ciudad = "Buenos Aires",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9216),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9205),
+                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(642),
+                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(634),
                             ImagenURL = "",
                             Nombre = "Edificio en la ciudad",
                             Pais = "Argentina"
@@ -101,8 +104,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 2,
                             Amenidad = "",
                             Ciudad = "Ibiza",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9219),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9218),
+                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(645),
+                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(644),
                             ImagenURL = "",
                             Nombre = "Casa en la playa",
                             Pais = "España"
@@ -112,8 +115,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 3,
                             Amenidad = "",
                             Ciudad = "Mendoza",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9220),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9220),
+                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(646),
+                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 54, 57, 558, DateTimeKind.Local).AddTicks(646),
                             ImagenURL = "",
                             Nombre = "Cabaña en las montañas",
                             Pais = "Argentina"
