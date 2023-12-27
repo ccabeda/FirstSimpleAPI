@@ -20,6 +20,7 @@ namespace MiPrimeraAPI.Controllers
         private readonly IVillageRepository _villaRepositorio; //traemos el contexto a los controladores para usar con la base de datos
         private readonly IMapper _mapper; // traemos el mapper para utilizar aqui 
         protected APIResponse _apiResponse;
+
         public VillaController(ILogger<VillaController> logger, IVillageRepository villaRepositorio, IMapper mapper)
         {
             _logger = logger;
@@ -54,7 +55,7 @@ namespace MiPrimeraAPI.Controllers
             return _apiResponse; //retorno el _apiResponse
         }
 
-        [HttpGet("id", Name = "GetVilla")] //otra peticion GET, agregamos el id para cambiarle la ruta. Ponemos nombre para el POST. 
+        [HttpGet(("{id}"), Name = "GetVilla")] //otra peticion GET, agregamos el id para cambiarle la ruta. Ponemos nombre para el POST. 
         //Documentar estado de codigos: 
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
@@ -93,7 +94,7 @@ namespace MiPrimeraAPI.Controllers
             return _apiResponse; //retorno el _apiResponse
         }
 
-        [HttpPost] //peticion POST, para agregar una village
+        [HttpPost()] //peticion POST, para agregar una village
         [ProducesResponseType(StatusCodes.Status201Created)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] //documentamos el estado 500
@@ -123,8 +124,8 @@ namespace MiPrimeraAPI.Controllers
                 }
                 //Villa modelo = new()              ***EN VEZ DE CREAR UNO X UNO LOS ATRIBUTOS ***
                 //{ 
-                //    Nombre = villa.Nombre,
                 //    Ciudad = villa.Ciudad,
+                //    Nombre = villa.Nombre,
                 //    Pais = villa.Pais,
                 //    ImagenURL = villa.ImagenURL,
                 //     Amenidad = villa.Amenidad
@@ -148,7 +149,7 @@ namespace MiPrimeraAPI.Controllers
             return _apiResponse; //retorno el _apiResponse
         }
 
-        [HttpDelete("id", Name = "DeleteVilla")] //damos como ruta la id del get primero. delete para borrrar
+        [HttpDelete(("{id}"), Name = "DeleteVilla")] //damos como ruta la id del get primero. delete para borrrar
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
@@ -189,7 +190,7 @@ namespace MiPrimeraAPI.Controllers
 
         }
 
-        [HttpPut("id", Name = "UpdateVilla")]
+        [HttpPut(("{id}"), Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
@@ -231,7 +232,7 @@ namespace MiPrimeraAPI.Controllers
 
         //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
 
-        [HttpPatch("id", Name = "PatchVilla")] //creamos el patch
+        [HttpPatch(("{id}"), Name = "PatchVilla")] //creamos el patch
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
 

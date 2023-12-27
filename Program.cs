@@ -32,6 +32,7 @@ builder.Services.AddScoped<IVillageRepository, VillageRepository>(); //agregamos
 builder.Services.AddScoped<INumberVillageRepository, NumberVillageRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las numbervillas 
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
