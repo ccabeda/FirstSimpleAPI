@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I32LvNlRjSFwVM8Y1qOgsP56W5mINfX3dK/Waq663t1VBgT/2rxhuApQChfqjSlKAEiTN/w8s+Ivyfgd7ErhLg==",
+  "dgSpecHash": "h4T3iEMt2Eig5Xgyk0Ut6/udCNlU4iofuLbQPdjhJiNXZBngVP49r0mFGu2+YU7C94KBkoCRms4xlB35oHAnLw==",
   "success": true,
   "projectFilePath": "C:\\Users\\cabed\\OneDrive\\Desktop\\Curso\\c_sharp\\MiPrimeraAPI\\MiPrimeraAPI.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\cabed\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\cabed\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\cabed\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\cabed\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",
     "C:\\Users\\cabed\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\cabed\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\8.0.0\\microsoft.aspnetcore.jsonpatch.8.0.0.nupkg.sha512",
     "C:\\Users\\cabed\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\8.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.8.0.0.nupkg.sha512",
