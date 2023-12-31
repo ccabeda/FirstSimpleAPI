@@ -42,7 +42,9 @@ builder.Services.AddScoped<INumberVillageRepository, NumberVillageRepository>();
 builder.Services.AddScoped<IValidator<VillaCreateDto>, VillaCreateValidator>();
 builder.Services.AddScoped<IValidator<VillaUpdateDto>, VillaUpdateValidator>();
 
+//services
 builder.Services.AddScoped<IVillaService, VillaService>();
+builder.Services.AddScoped<INumberVillaService, NumberVillaService>();
 
 builder.Services.AddScoped<APIResponse>();
 

@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using FluentValidation;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using MiPrimeraAPI.Models;
 using MiPrimeraAPI.Models.DTO;
-using MiPrimeraAPI.Repository.IRepository;
 using MiPrimeraAPI.Service;
 using System.Net;
 
@@ -14,13 +11,9 @@ namespace MiPrimeraAPI.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
-        private readonly APIResponse _apiResponse; //el apirepsonse para que todos devuelvan lo mismo
         private readonly IVillaService _villaService;
-
-
-        public VillaController(APIResponse apiResponse, IVillaService villaService)
+        public VillaController(IVillaService villaService)
         {
-            _apiResponse = apiResponse;
             _villaService = villaService;
         }
 
@@ -68,7 +61,7 @@ namespace MiPrimeraAPI.Controllers
             var result = await _villaService.NewVillage(CreatevillaDTO);
             if (result.statusCode == HttpStatusCode.Created)
             {
-                return CreatedAtRoute("GetVilla", new { id = result.Result }, _apiResponse); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
+                return CreatedAtRoute("GetVilla", new { id = result.Result }, result); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
             }
             else
             {

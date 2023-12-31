@@ -12,6 +12,7 @@ namespace MiPrimeraAPI.Models
         public int VillaId { set; get; }
 
         [ForeignKey("VillaId")]
+        [Required]
         public Villa Villa { set; get; }
 
         public int HabitacionesDisponibles { set; get; }

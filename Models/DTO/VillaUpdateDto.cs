@@ -14,7 +14,7 @@ namespace MiPrimeraAPI.Models.DTO
         public required string Ciudad { get; set; }
 
         public required string Pais { get; set; }
-        public string ImagenURL { get; set; }
-        public string Amenidad { get; set; }
+        public string? ImagenURL { get; set; }
+        public string? Amenidad { get; set; }
     }
 }

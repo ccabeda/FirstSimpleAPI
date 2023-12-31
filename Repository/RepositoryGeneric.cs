@@ -5,24 +5,24 @@ using System.Linq.Expressions;
 
 namespace MiPrimeraAPI.Repository
 {
-    public class RepositoryGeneric<T> : IRepositoryGeneric<T> where T : class
+    public class RepositoryGeneric<TEntity> : IRepositoryGeneric<TEntity> where TEntity : class
     {
         private readonly AplicationDbContext _db; //traemos el contexto a los controladores para usar con la base de datos
-        internal DbSet<T> dbSet; //Conversión del tipo <T> a entidad
+        internal DbSet<TEntity> dbSet; //Conversión del tipo <T> a entidad
 
         public RepositoryGeneric(AplicationDbContext db) //constructor
         {
             _db = db;
-            this.dbSet = _db.Set<T>();
+            this.dbSet = _db.Set<TEntity>();
         }
 
-        public async Task Agregar(T entidad) //metodo generico para crear
+        public async Task Agregar(TEntity entidad) //metodo generico para crear
         {
             await dbSet.AddAsync(entidad);
             await Guardar();
         }
 
-        public async Task Eliminar(T entidad) //metodo generico para eliminar
+        public async Task Eliminar(TEntity entidad) //metodo generico para eliminar
         {
             dbSet.Remove(entidad);
             await Guardar();
@@ -33,9 +33,9 @@ namespace MiPrimeraAPI.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<T> Obtener(Expression<Func<T, bool>>? filtro = null, bool tracked = true) //metodo para obtener 1 villa
+        public async Task<TEntity> Obtener(Expression<Func<TEntity, bool>>? filtro = null, bool tracked = true) //metodo para obtener 1 villa
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<TEntity> query = dbSet;
             if(!tracked)
             {
                 query = query.AsNoTracking();
@@ -47,9 +47,9 @@ namespace MiPrimeraAPI.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<T>> ObtenerTodos(Expression<Func<T, bool>>? filtro = null) //metodo para obtener lista de villas
+        public async Task<List<TEntity>> ObtenerTodos(Expression<Func<TEntity, bool>>? filtro = null) //metodo para obtener lista de villas
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<TEntity> query = dbSet;
             if (filtro != null)
             {
                 query = query.Where(filtro);

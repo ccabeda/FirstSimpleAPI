@@ -2,15 +2,15 @@
 
 namespace MiPrimeraAPI.Repository.IRepository
 { //interfaz generica para cualquier tipo de sistema
-    public interface IRepositoryGeneric<T> where T : class //esto permite que t sea solo clases
+    public interface IRepositoryGeneric<TEntity> where TEntity : class //esto permite que t sea solo clases
     {
-        Task Agregar(T entidad); //funcion para crear uuna entiedad
+        Task Agregar(TEntity entidad); //funcion para crear uuna entiedad
 
-        Task Eliminar(T entidad); //eliminar
+        Task Eliminar(TEntity entidad); //eliminar
 
-        Task<List<T>> ObtenerTodos(Expression<Func<T, bool>>? filtro = null); //obtiene la lista de elementos y puede ponerse un filtro, que es null por default
+        Task<List<TEntity>> ObtenerTodos(Expression<Func<TEntity, bool>>? filtro = null); //obtiene la lista de elementos y puede ponerse un filtro, que es null por default
 
-        Task<T> Obtener(Expression<Func<T, bool>>? filtro = null, bool tracked = true);
+        Task<TEntity> Obtener(Expression<Func<TEntity, bool>>? filtro = null, bool tracked = true);
 
         Task Guardar(); //guardar cambios 
     }
