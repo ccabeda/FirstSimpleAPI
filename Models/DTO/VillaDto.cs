@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
 namespace MiPrimeraAPI.Models.DTO
 {   //Las clases DTO son para pasarle los atributos al controlador y que no tengan problemas con si hay atributos que no mostrar
     public class VillaDto

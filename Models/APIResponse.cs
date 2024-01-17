@@ -8,6 +8,7 @@ namespace MiPrimeraAPI.Models
         public bool isExit { get; set; } = true; //verifica si fue exitoso o ocurrio un error en el endpoint
         public List<String>? ErrorList { get; set; } //lista para guardar los mensajes de error
         public object? Result { get; set; } //almacena el objeto a devolver en los endpoints
+        public string token { get; set; }
 
 
     }

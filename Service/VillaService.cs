@@ -6,6 +6,7 @@ using MiPrimeraAPI.Models;
 using MiPrimeraAPI.Models.DTO;
 using MiPrimeraAPI.Repository.IRepository;
 using System.Net;
+using System.Security.Claims;
 
 namespace MiPrimeraAPI.Service
 {
@@ -252,6 +253,6 @@ namespace MiPrimeraAPI.Service
             }
             return _apiResponse;
         }
-    
+
     }
 }

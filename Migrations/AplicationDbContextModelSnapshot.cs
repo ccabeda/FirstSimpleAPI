@@ -3,7 +3,8 @@ using System;
 using MiPrimeraAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
@@ -16,7 +17,7 @@ namespace MiPrimeraAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -43,6 +44,63 @@ namespace MiPrimeraAPI.Migrations
                     b.HasIndex("VillaId");
 
                     b.ToTable("NumeroVillas");
+                });
+
+            modelBuilder.Entity("MiPrimeraAPI.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contraseña")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaDeActualización")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaDeCreación")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Apellido = "Pérez",
+                            Contraseña = "123.@",
+                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1901),
+                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1900),
+                            Gmail = "rperez@gmail.com",
+                            Nombre = "Rodrigo",
+                            Rol = "Administrador",
+                            UserName = "pperez_"
+                        });
                 });
 
             modelBuilder.Entity("MiPrimeraAPI.Models.Villa", b =>
@@ -89,8 +147,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 1,
                             Amenidad = "",
                             Ciudad = "Buenos Aires",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9216),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9205),
+                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1749),
+                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1740),
                             ImagenURL = "",
                             Nombre = "Edificio en la ciudad",
                             Pais = "Argentina"
@@ -100,8 +158,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 2,
                             Amenidad = "",
                             Ciudad = "Ibiza",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9219),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9218),
+                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1751),
+                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1751),
                             ImagenURL = "",
                             Nombre = "Casa en la playa",
                             Pais = "España"
@@ -111,8 +169,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 3,
                             Amenidad = "",
                             Ciudad = "Mendoza",
-                            FechaDeActualización = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9220),
-                            FechaDeCreación = new DateTime(2023, 12, 22, 13, 58, 7, 746, DateTimeKind.Local).AddTicks(9220),
+                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1753),
+                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1753),
                             ImagenURL = "",
                             Nombre = "Cabaña en las montañas",
                             Pais = "Argentina"

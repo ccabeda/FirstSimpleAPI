@@ -9,7 +9,7 @@ namespace MiPrimeraAPI.Repository
         private readonly AplicationDbContext _db;
 
         public NumberVillageRepository(AplicationDbContext db) : base(db) //Al llamar base(db), estás pasando el contexto de base de datos (AplicationDbContext) a la clase
-        {                                                           //base RepositoryGeneric<Villa>, lo que permite inicializar correctamente la clase base y evitar el
+        {                                                           //base RepositoryGeneric<NumberVilla>, lo que permite inicializar correctamente la clase base y evitar el
                                                                     //error que mencionabas anteriormente.
             _db = db;
         }
@@ -19,7 +19,7 @@ namespace MiPrimeraAPI.Repository
             entidad.FechaDeActualización = DateTime.Now; //actualizamos la fecha
             _db.NumeroVillas.Update(entidad); //updateamos la entidad
             await _db.SaveChangesAsync(); //guardamos los cmabios
-            return entidad; //retornamos la villa 
+            return entidad; //retornamos el número de villa
         }
     }
 }

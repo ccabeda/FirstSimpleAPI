@@ -17,8 +17,11 @@ namespace MiPrimeraAPI
             CreateMap<NumberVilla, NumberVillaDto>().ReverseMap();
             CreateMap<NumberVilla, NumberVillaCreateDto>().ReverseMap();
             CreateMap<NumberVilla, NumberVillaUpdateDto>().ReverseMap();
+
+            CreateMap<Usuario, UsuarioDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioCreateDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioUpdateDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioLoginDto>().ReverseMap();
         }
-
-
     }
 }
