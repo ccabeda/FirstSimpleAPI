@@ -20,7 +20,6 @@ namespace MiPrimeraAPI.Controllers
         }
 
         //Agregar a los metodos asincronia con async task<> y delante de los metodos el await
-
         [HttpGet]//es una operacion GET
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         public async Task <ActionResult <APIResponse>> GetNumberVillas() //Queremos que nos devuelva una lista de las villas
