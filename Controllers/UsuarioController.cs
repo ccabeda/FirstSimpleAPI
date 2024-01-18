@@ -50,8 +50,7 @@ namespace MiPrimeraAPI.Controllers
             else
             {
                 return Ok(result);
-            }
-                
+            }        
         }
 
         [HttpPost] //peticion POST, para agregar una village
@@ -90,7 +89,6 @@ namespace MiPrimeraAPI.Controllers
            {
                 return NoContent();
            }
-
         }
 
         [HttpPut(("{id}"), Name = "UpdateUsuario")]
@@ -113,7 +111,6 @@ namespace MiPrimeraAPI.Controllers
             {
                 return NoContent();
             }
-
         }
 
         //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
@@ -132,7 +129,6 @@ namespace MiPrimeraAPI.Controllers
             {
                 return NoContent();
             }
-
         }
 
         [HttpPost("Login")]

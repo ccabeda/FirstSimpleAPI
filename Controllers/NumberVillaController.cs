@@ -57,8 +57,6 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] //documentamos el estado 500
         public async Task <ActionResult<APIResponse>> NewNumberVilla([FromBody] NumberVillaCreateDto CreateNumberVillaDTO)
         {
-            
-            
                 //validacion tradicional 
                 if (!ModelState.IsValid) //al poner los [required] o [max.lenght] verificamos que se cumplan todos, sino error 400
                 {
@@ -96,7 +94,6 @@ namespace MiPrimeraAPI.Controllers
             {
                 return NoContent();
             }
-
         }
 
         [HttpPut("id", Name = "UpdateNumberVilla")]
