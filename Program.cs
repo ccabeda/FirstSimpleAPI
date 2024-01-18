@@ -71,6 +71,7 @@ builder.Services.AddAutoMapper(typeof(AutomapperConfig)); //PASO 2 AUTOMAPPER. A
 builder.Services.AddScoped<IVillaRepository, VillaRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las villas 
 builder.Services.AddScoped<INumberVillaRepository, NumberVillaRepository>(); //agregamos al servicio tanto la interfaz como el repositorio de las numbervillas
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
 
 //Validators villa
 builder.Services.AddScoped<IValidator<VillaCreateDto>, VillaCreateValidator>();
@@ -82,6 +83,7 @@ builder.Services.AddScoped<IValidator<UsuarioUpdateDto>, UsuarioUpdateValidator>
 builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddScoped<INumberVillaService, NumberVillaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IRolService, RolService>();
 
 //APIResponse 
 builder.Services.AddScoped<APIResponse>();

@@ -13,7 +13,9 @@ namespace MiPrimeraAPI.Models
         public string Apellido { get; set; }
         public string Gmail { get; set; }
         public string Contraseña { get; set; }
-        public string Rol { get; set; }
+        public int RolId { set; get; }
+        [ForeignKey("RolId")]
+        public Rol Rol { set; get; }
         public DateTime FechaDeCreación { get; set; }
         public DateTime FechaDeActualización { get; set; }
     }

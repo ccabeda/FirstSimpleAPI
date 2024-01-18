@@ -7,6 +7,5 @@
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Gmail { get; set; }
-        public string Rol { get; set; }
     }
 }

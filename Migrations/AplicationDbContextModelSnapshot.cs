@@ -46,6 +46,52 @@ namespace MiPrimeraAPI.Migrations
                     b.ToTable("NumeroVillas");
                 });
 
+            modelBuilder.Entity("MiPrimeraAPI.Models.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaDeActualización")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaDeCreación")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(646),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(645),
+                            Nombre = "Administrador"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(658),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(657),
+                            Nombre = "Usuario"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(668),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(667),
+                            Nombre = "SuperAdmin"
+                        });
+                });
+
             modelBuilder.Entity("MiPrimeraAPI.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -76,9 +122,8 @@ namespace MiPrimeraAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Rol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -86,20 +131,46 @@ namespace MiPrimeraAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RolId");
+
                     b.ToTable("Usuarios");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 10,
                             Apellido = "Pérez",
                             Contraseña = "123.@",
-                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1901),
-                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1900),
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(682),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(681),
                             Gmail = "rperez@gmail.com",
-                            Nombre = "Rodrigo",
-                            Rol = "Administrador",
+                            Nombre = "Lautaro",
+                            RolId = 1,
                             UserName = "pperez_"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Apellido = "Messi",
+                            Contraseña = "123.@",
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(695),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(694),
+                            Gmail = "leo@gmail.com",
+                            Nombre = "Leonel",
+                            RolId = 2,
+                            UserName = "jorgemessi"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Apellido = "Peña",
+                            Contraseña = "123.@",
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(707),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(706),
+                            Gmail = "doblep@gmail.com",
+                            Nombre = "Pedro",
+                            RolId = 3,
+                            UserName = "doblep"
                         });
                 });
 
@@ -147,8 +218,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 1,
                             Amenidad = "",
                             Ciudad = "Buenos Aires",
-                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1749),
-                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1740),
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(516),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(506),
                             ImagenURL = "",
                             Nombre = "Edificio en la ciudad",
                             Pais = "Argentina"
@@ -158,8 +229,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 2,
                             Amenidad = "",
                             Ciudad = "Ibiza",
-                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1751),
-                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1751),
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(519),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(518),
                             ImagenURL = "",
                             Nombre = "Casa en la playa",
                             Pais = "España"
@@ -169,8 +240,8 @@ namespace MiPrimeraAPI.Migrations
                             Id = 3,
                             Amenidad = "",
                             Ciudad = "Mendoza",
-                            FechaDeActualización = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1753),
-                            FechaDeCreación = new DateTime(2024, 1, 17, 16, 12, 38, 264, DateTimeKind.Local).AddTicks(1753),
+                            FechaDeActualización = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(521),
+                            FechaDeCreación = new DateTime(2024, 1, 18, 0, 45, 56, 347, DateTimeKind.Local).AddTicks(521),
                             ImagenURL = "",
                             Nombre = "Cabaña en las montañas",
                             Pais = "Argentina"
@@ -186,6 +257,17 @@ namespace MiPrimeraAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Villa");
+                });
+
+            modelBuilder.Entity("MiPrimeraAPI.Models.Usuario", b =>
+                {
+                    b.HasOne("MiPrimeraAPI.Models.Rol", "Rol")
+                        .WithMany()
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
                 });
 #pragma warning restore 612, 618
         }

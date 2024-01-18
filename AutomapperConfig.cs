@@ -19,6 +19,8 @@ namespace MiPrimeraAPI
             CreateMap<Usuario, UsuarioCreateDto>().ReverseMap();
             CreateMap<Usuario, UsuarioUpdateDto>().ReverseMap();
             CreateMap<Usuario, UsuarioLoginDto>().ReverseMap();
+            CreateMap<Rol, RolDto>().ReverseMap();
+            CreateMap<Rol, RolCreateDto>().ReverseMap();
         }
     }
 }

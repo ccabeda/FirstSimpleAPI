@@ -156,7 +156,7 @@ namespace MiPrimeraAPI.Service
                 Usuario modelo = _mapper.Map<Usuario>(CreateUsuarioDTO); //mapeamos el usuario a crear del dto enviado
                 modelo.FechaDeCreación = DateTime.Now;
                 modelo.FechaDeActualización = DateTime.Now;
-                modelo.Rol = "Usuario";
+                modelo.RolId = 2; //simepre se crean con Rol Usuario (sin permisos)
                 await _usuarioRepositorio.Agregar(modelo); //la agregamos a la base de datos en la tabla correspondiente
                 _apiResponse.Result = modelo.Id;
                 _apiResponse.statusCode = HttpStatusCode.Created;
@@ -193,7 +193,6 @@ namespace MiPrimeraAPI.Service
                 patchUsuarioDTO.ApplyTo(UsuarioDTO); //aplicamos los cambios del json al objeto
                 _mapper.Map(UsuarioDTO, usuario); //mapeo los datos del dto a la usuario 
                 usuario.FechaDeActualización = DateTime.Now;
-                usuario.Rol = "Usuario";
                 await _usuarioRepositorio.Actualizar(usuario); //acutalizo y guardo
                 _apiResponse.statusCode = HttpStatusCode.NoContent;
                 return _apiResponse;
@@ -240,7 +239,6 @@ namespace MiPrimeraAPI.Service
                 }
                 // Si existe id a actualizar, mapeamos el modelo con los datos del usuarioDTO
                 Usuario modelo = _mapper.Map<Usuario>(UpdateUsuarioDTO);
-                modelo.Rol = "Usuario";
                 await _usuarioRepositorio.Actualizar(modelo); // Actualizamos la Usuario existente en el contexto
                 _apiResponse.statusCode = HttpStatusCode.NoContent;
                 return _apiResponse;
@@ -266,7 +264,7 @@ namespace MiPrimeraAPI.Service
                 new Claim(ClaimTypes.Email, usuario.Gmail),
                 new Claim(ClaimTypes.GivenName, usuario.Nombre),
                 new Claim(ClaimTypes.Surname, usuario.Apellido),
-                new Claim(ClaimTypes.Role, usuario.Rol),
+                new Claim(ClaimTypes.Role, usuario.RolId.ToString()),
             };
             //creamos el token
             var token = new JwtSecurityToken(

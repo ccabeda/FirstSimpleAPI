@@ -21,9 +21,9 @@ namespace MiPrimeraAPI.Controllers
 
         //Agregar a los metodos asincronia con async task<> y delante de los metodos el await
         [HttpGet]//es una operacion GET
-        [Authorize(Roles = "Administrador")] //autorize para pedir token
+        [Authorize(Roles = "1,3")] //autorize para pedir token. Ponemos 1 ya que el Rol administrador tiene id 1 y tambien 3 para que el superadmin pueda
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
-        public async Task <ActionResult <APIResponse>> GetUsuarios() //Queremos que nos devuelva una lista de las villas
+        public async Task <ActionResult <APIResponse>> GetUsuarios() //Queremos que nos devuelva una lista de los usuarios
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
              var result = await _usuarioService.GetUsuarios();
@@ -31,12 +31,12 @@ namespace MiPrimeraAPI.Controllers
         }
 
         [HttpGet(("{id}"), Name = "GetUsuario")] //otra peticion GET, agregamos el id para cambiarle la ruta. Ponemos nombre para el POST.
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "1,3")]
         //Documentar estado de codigos: 
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
-        public async Task<ActionResult <APIResponse>> GetUsuario(int id) //buscamos una sola villa por id
+        public async Task<ActionResult <APIResponse>> GetUsuario(int id) //buscamos un solo usuario por id
         {
             var result = await _usuarioService.GetUsuario(id);
             if (result.statusCode == HttpStatusCode.NotFound)
@@ -61,7 +61,7 @@ namespace MiPrimeraAPI.Controllers
             var result = await _usuarioService.NewUsuario(CreateUsuarioDTO);
             if (result.statusCode == HttpStatusCode.Created)
             {
-                return CreatedAtRoute("GetUsuario", new { id = result.Result }, result); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
+                return CreatedAtRoute("GetUsuario", new { id = result.Result }, result); //creamos la ruta para el nuevo usuario con el get anterior que recibia una id.
             }
             else
             {
@@ -70,11 +70,11 @@ namespace MiPrimeraAPI.Controllers
         }
 
         [HttpDelete(("{id}"), Name = "DeleteUsuario")] //damos como ruta la id del get primero. delete para borrrar
-        [Authorize]
+        [Authorize(Roles="1,3")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
-        public async Task <IActionResult> DeleteUsuario(int id)  //usamos la interfaz IActionResult para retornar Nocontent. Pedimos un ID para eliminar la village
+        public async Task <IActionResult> DeleteUsuario(int id)  //usamos la interfaz IActionResult para retornar Nocontent. Pedimos un ID para eliminar el usuario
         {
            var result = await _usuarioService.DeleteUsuario(id);
            if (result.statusCode == HttpStatusCode.NotFound)
@@ -92,7 +92,7 @@ namespace MiPrimeraAPI.Controllers
         }
 
         [HttpPut(("{id}"), Name = "UpdateUsuario")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "1,3")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
@@ -115,7 +115,7 @@ namespace MiPrimeraAPI.Controllers
 
         //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
         [HttpPatch(("{id}"), Name = "PatchUsuario")] //creamos el patch
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "1,3")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         public async Task <IActionResult> PatchUsuario(int id, JsonPatchDocument<UsuarioUpdateDto> patchUsuarioDTO) //pedimos el id y el objeto en JSON con lo que quiere actualizar
