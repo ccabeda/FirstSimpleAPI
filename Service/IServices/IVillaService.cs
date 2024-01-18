@@ -9,9 +9,9 @@ namespace MiPrimeraAPI.Service
     {
         public Task<APIResponse> GetVillas();
         public Task<APIResponse> GetVilla(int id);
-        public Task<APIResponse> NewVillage([FromBody] VillaCreateDto CreatevillaDTO);
-        public Task<APIResponse> DeleteVillage(int id);
-        public Task<APIResponse> UpdateVillage(int id, [FromBody] VillaUpdateDto UpdatevillaDTO);
-        public Task<APIResponse> PatchVillage(int id, JsonPatchDocument<VillaUpdateDto> patchVillaDTO);
+        public Task<APIResponse> NewVilla([FromBody] VillaCreateDto CreateVillaDTO);
+        public Task<APIResponse> DeleteVilla(int id);
+        public Task<APIResponse> UpdateVilla(int id, [FromBody] VillaUpdateDto UpdateVillaDTO);
+        public Task<APIResponse> PatchVilla(int id, JsonPatchDocument<VillaUpdateDto> patchVillaDTO);
     }
 }

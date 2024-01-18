@@ -16,6 +16,5 @@ namespace MiPrimeraAPI.Models
         public string Rol { get; set; }
         public DateTime FechaDeCreación { get; set; }
         public DateTime FechaDeActualización { get; set; }
-
     }
 }

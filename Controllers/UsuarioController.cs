@@ -20,11 +20,9 @@ namespace MiPrimeraAPI.Controllers
         }
 
         //Agregar a los metodos asincronia con async task<> y delante de los metodos el await
-
         [HttpGet]//es una operacion GET
         [Authorize(Roles = "Administrador")] //autorize para pedir token
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
-
         public async Task <ActionResult <APIResponse>> GetUsuarios() //Queremos que nos devuelva una lista de las villas
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
@@ -38,7 +36,6 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
-
         public async Task<ActionResult <APIResponse>> GetUsuario(int id) //buscamos una sola villa por id
         {
             var result = await _usuarioService.GetUsuario(id);
@@ -78,7 +75,6 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
-
         public async Task <IActionResult> DeleteUsuario(int id)  //usamos la interfaz IActionResult para retornar Nocontent. Pedimos un ID para eliminar la village
         {
            var result = await _usuarioService.DeleteUsuario(id);
@@ -102,8 +98,6 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
-     
-
         public async Task <ActionResult<APIResponse>> UpdateUsuario(int id, [FromBody] UsuarioUpdateDto UpdateUsuarioDTO)
         {
              var result = await _usuarioService.UpdateUsuario(id, UpdateUsuarioDTO);
@@ -123,12 +117,10 @@ namespace MiPrimeraAPI.Controllers
         }
 
         //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
-
         [HttpPatch(("{id}"), Name = "PatchUsuario")] //creamos el patch
         [Authorize(Roles = "Administrador")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
-
         public async Task <IActionResult> PatchUsuario(int id, JsonPatchDocument<UsuarioUpdateDto> patchUsuarioDTO) //pedimos el id y el objeto en JSON con lo que quiere actualizar
         {
             var result = await _usuarioService.PatchUsuario(id, patchUsuarioDTO);
@@ -143,11 +135,9 @@ namespace MiPrimeraAPI.Controllers
 
         }
 
-
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
-
         public async Task<ActionResult<APIResponse>> LoginUsuario(UsuarioLoginDto usuario) //metodo para logearse
         {
             var result = await _usuarioService.LoginUsuario(usuario); //creo el token de logeo o null si falla
@@ -160,18 +150,5 @@ namespace MiPrimeraAPI.Controllers
                 return Ok(result);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

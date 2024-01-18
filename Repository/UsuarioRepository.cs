@@ -28,6 +28,5 @@ namespace MiPrimeraAPI.Repository
         {
             return await _db.Usuarios.FirstOrDefaultAsync(u => u.UserName == entidad.UserName && u.Contraseña == entidad.Contraseña); //verificar login
         }
-
     }  
 }

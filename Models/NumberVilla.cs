@@ -7,14 +7,11 @@ namespace MiPrimeraAPI.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)] //sera la key pero no se sumara automaticamente
         public int VillaNo { set; get; } //habitaciones disponibles
-
         [Required]
         public int VillaId { set; get; }
-
         [ForeignKey("VillaId")]
         [Required]
         public Villa Villa { set; get; }
-
         public int HabitacionesDisponibles { set; get; }
         public DateTime FechaDeCreación { get; set; }
         public DateTime FechaDeActualización { get; set; }

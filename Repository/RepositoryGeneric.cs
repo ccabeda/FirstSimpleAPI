@@ -15,7 +15,6 @@ namespace MiPrimeraAPI.Repository
             _db = db;
             this.dbSet = _db.Set<TEntity>();
         }
-
         public async Task Agregar(TEntity entidad) //metodo generico para crear
         {
             await dbSet.AddAsync(entidad);
@@ -56,8 +55,6 @@ namespace MiPrimeraAPI.Repository
             }
             return await query.ToListAsync();
         }
-
-
         //***LOS METODOS DE ACTUALIZAR NO SON GENERICOS, VAN EN LOS REPOS ESPECIFICOS
     }
 }

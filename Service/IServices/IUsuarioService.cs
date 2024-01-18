@@ -13,7 +13,6 @@ namespace MiPrimeraAPI.Service.IServices
         public Task<APIResponse> DeleteUsuario(int id);
         public Task<APIResponse> UpdateUsuario(int id, [FromBody] UsuarioUpdateDto UpdateUsuarioDTO);
         public Task<APIResponse> PatchUsuario(int id, JsonPatchDocument<UsuarioUpdateDto> patchUsuarioDTO);
-
         //metodo para generar token de autentificación
         public string GenerarTokendeLogin(Usuario usuario);
         public Task<APIResponse> LoginUsuario(UsuarioLoginDto usuario);

@@ -16,9 +16,5 @@ namespace MiPrimeraAPI.Models
         public  string Amenidad { get; set; }   
         public DateTime FechaDeCreación { get; set; }
         public DateTime FechaDeActualización { get; set; }
-
-        
-
-
     }
 }

@@ -11,7 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Http;
 
 namespace MiPrimeraAPI.Service
 {
@@ -24,7 +23,6 @@ namespace MiPrimeraAPI.Service
         private readonly IValidator<UsuarioCreateDto> _usuarioCreateValidator; //fluent validator
         private readonly IValidator<UsuarioUpdateDto> _usuarioUpdateValidator;
         private readonly IConfiguration _config; //para token
-
 
         public UsuarioService(ILogger<UsuarioService> logger, IUsuarioRepository usuarioRepositorio, IMapper mapper, APIResponse apiResponse, IValidator<UsuarioCreateDto> usuarioCreateValidator,
             IValidator<UsuarioUpdateDto> usuarioUpdateValidator, IConfiguration config)
@@ -57,6 +55,7 @@ namespace MiPrimeraAPI.Service
             }
             return _apiResponse; //retorno el _apiResponse
         }
+
         public async Task<APIResponse> DeleteUsuario(int id)
         {
             try
@@ -69,7 +68,7 @@ namespace MiPrimeraAPI.Service
                     return _apiResponse;
                 }
                 var usuario = await _usuarioRepositorio.Obtener(v => v.Id == id); //esto hace que, en la variable usuario, se guarde el objeto que queremos eliminar unicamente si se encuentra en la db
-                                                                              //si no se encuentra, guarda un null
+                                                                                               //si no se encuentra, guarda un null
                 if (usuario == null)
                 {
                     _logger.LogError("Los datos ingresados no coindicen con un usuario registrado."); //logger de error
@@ -130,7 +129,6 @@ namespace MiPrimeraAPI.Service
             try
             {
                 var fluent_validation = await _usuarioCreateValidator.ValidateAsync(CreateUsuarioDTO); //uso de fluent validations
-
                 if (!fluent_validation.IsValid)
                 {
                     var errors = fluent_validation.Errors.Select(error => error.ErrorMessage).ToList();
@@ -139,16 +137,14 @@ namespace MiPrimeraAPI.Service
                     _apiResponse.statusCode = HttpStatusCode.BadRequest;
                     _apiResponse.ErrorList = errors;
                     return _apiResponse;
-
                 }
                 if (await _usuarioRepositorio.Obtener(v => v.UserName.ToUpper() == CreateUsuarioDTO.UserName.ToUpper()) != null) //buscamos en la base de datos si hay un nombre igual al ingresado.
-                                                                                                                         //si el resultado de la busqueda es !null, significa que encontro un nombre igual.
+                                                                                                           //si el resultado de la busqueda es !null, significa que encontro un nombre igual.
                 {
                     _logger.LogError("El usuario que intenta ingresar ya esta registrado.");
                     _apiResponse.isExit = false;
                     _apiResponse.statusCode = HttpStatusCode.BadRequest;
                     return _apiResponse;
-
                 }
                 if (CreateUsuarioDTO == null) //si el usuario esta vacia retorna error 400
                 {
@@ -175,7 +171,6 @@ namespace MiPrimeraAPI.Service
             }
             return _apiResponse; //retorno el _apiResponse
         }
-
 
         public async Task<APIResponse> PatchUsuario(int id, JsonPatchDocument<UsuarioUpdateDto> patchUsuarioDTO)
         {
@@ -211,7 +206,6 @@ namespace MiPrimeraAPI.Service
             }
             return _apiResponse;
         }
-
 
         public async Task<APIResponse> UpdateUsuario(int id, [FromBody] UsuarioUpdateDto UpdateUsuarioDTO)
         {
@@ -265,7 +259,6 @@ namespace MiPrimeraAPI.Service
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])); //creamos clave simetrica
             var credencial = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //creamos credenciales de firma
-
             //creamos las claims
             var claims = new[] 
             {
@@ -275,7 +268,6 @@ namespace MiPrimeraAPI.Service
                 new Claim(ClaimTypes.Surname, usuario.Apellido),
                 new Claim(ClaimTypes.Role, usuario.Rol),
             };
-
             //creamos el token
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
@@ -292,7 +284,6 @@ namespace MiPrimeraAPI.Service
             try
             {
                 var user = await _usuarioRepositorio.Autenticar(usuario); //verifico si el usuario existe 
-
                 if (user == null) //si es es null retorno
                 {
                     _apiResponse.isExit = false;

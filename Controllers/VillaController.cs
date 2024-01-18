@@ -18,10 +18,8 @@ namespace MiPrimeraAPI.Controllers
         }
 
         //Agregar a los metodos asincronia con async task<> y delante de los metodos el await
-
         [HttpGet]//es una operacion GET
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
-
         public async Task <ActionResult <APIResponse>> GetVillas() //Queremos que nos devuelva una lista de las villas
                                                                 //ActionResult = para retornar el estado de codigo (404 not found, 200 ok, etc)
         {
@@ -34,7 +32,6 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
-
         public async Task<ActionResult <APIResponse>> GetVilla(int id) //buscamos una sola villa por id
         {
             var result = await _villaService.GetVilla(id);
@@ -49,16 +46,15 @@ namespace MiPrimeraAPI.Controllers
             else
             {
                 return Ok(result);
-            }
-                
+            }         
         }
 
         [HttpPost()] //peticion POST, para agregar una village
         [ProducesResponseType(StatusCodes.Status201Created)] //documentamos el estado 200
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
-        public async Task <ActionResult<APIResponse>> NewVillage([FromBody] VillaCreateDto CreatevillaDTO)
+        public async Task <ActionResult<APIResponse>> NewVilla([FromBody] VillaCreateDto CreatevillaDTO)
         {
-            var result = await _villaService.NewVillage(CreatevillaDTO);
+            var result = await _villaService.NewVilla(CreatevillaDTO);
             if (result.statusCode == HttpStatusCode.Created)
             {
                 return CreatedAtRoute("GetVilla", new { id = result.Result }, result); //creamos la ruta para la nueva villa con el get anterior que recibia una id.
@@ -73,10 +69,9 @@ namespace MiPrimeraAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
-
-        public async Task <IActionResult> DeleteVillage(int id)  //usamos la interfaz IActionResult para retornar Nocontent. Pedimos un ID para eliminar la village
+        public async Task <IActionResult> DeleteVilla(int id)  //usamos la interfaz IActionResult para retornar Nocontent. Pedimos un ID para eliminar la village
         {
-           var result = await _villaService.DeleteVillage(id);
+           var result = await _villaService.DeleteVilla(id);
            if (result.statusCode == HttpStatusCode.NotFound)
            {
                 return NotFound(result);
@@ -89,18 +84,15 @@ namespace MiPrimeraAPI.Controllers
            {
                 return NoContent();
            }
-
         }
 
         [HttpPut(("{id}"), Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
         [ProducesResponseType(StatusCodes.Status404NotFound)] //documentamos el estado 404
-     
-
-        public async Task <ActionResult<APIResponse>> UpdateVillage(int id, [FromBody] VillaUpdateDto UpdatevillaDTO)
+        public async Task <ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDto UpdatevillaDTO)
         {
-             var result = await _villaService.UpdateVillage(id, UpdatevillaDTO);
+             var result = await _villaService.UpdateVilla(id, UpdatevillaDTO);
             if (result.statusCode == HttpStatusCode.NotFound)
             {
                 return NotFound(result);
@@ -113,18 +105,15 @@ namespace MiPrimeraAPI.Controllers
             {
                 return NoContent();
             }
-
         }
 
         //ACLARACIÓN: Para hacer un Patch se necesita un NuGet
-
         [HttpPatch(("{id}"), Name = "PatchVilla")] //creamos el patch
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //documentamos el estado 400
         [ProducesResponseType(StatusCodes.Status204NoContent)] //documentamos no content 204
-
-        public async Task <IActionResult> PatchVillage(int id, JsonPatchDocument<VillaUpdateDto> patchVillaDTO) //pedimos el id y el objeto en JSON con lo que quiere actualizar
+        public async Task <IActionResult> PatchVilla(int id, JsonPatchDocument<VillaUpdateDto> patchVillaDTO) //pedimos el id y el objeto en JSON con lo que quiere actualizar
         {
-            var result = await _villaService.PatchVillage(id, patchVillaDTO);
+            var result = await _villaService.PatchVilla(id, patchVillaDTO);
              if (result.statusCode == HttpStatusCode.BadRequest)
             {
                 return BadRequest(result);
@@ -133,21 +122,6 @@ namespace MiPrimeraAPI.Controllers
             {
                 return NoContent();
             }
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

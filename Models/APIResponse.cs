@@ -9,7 +9,5 @@ namespace MiPrimeraAPI.Models
         public List<String>? ErrorList { get; set; } //lista para guardar los mensajes de error
         public object? Result { get; set; } //almacena el objeto a devolver en los endpoints
         public string token { get; set; }
-
-
     }
 }
