@@ -184,6 +184,17 @@ namespace MiPrimeraAPI.Service
                 }
                 VillaUpdateDto villaDTO = _mapper.Map<VillaUpdateDto>(villa); //pasamos de villa a villaDTO
                 patchVillaDTO.ApplyTo(villaDTO); //aplicamos los cambios del json al objeto
+                var fluent_validation = await _villaUpdateValidator.ValidateAsync(villaDTO); //uso de fluent validations
+                if (!fluent_validation.IsValid)
+                {
+                    var errors = fluent_validation.Errors.Select(error => error.ErrorMessage).ToList();
+                    _logger.LogError("Error al validar los datos de entrada.");
+                    _apiResponse.isExit = false;
+                    _apiResponse.statusCode = HttpStatusCode.BadRequest;
+                    _apiResponse.ErrorList = errors;
+                    return _apiResponse;
+
+                }
                 _mapper.Map(villaDTO, villa); //mapeo los datos del dto a la villa 
                 villa.FechaDeActualización = DateTime.Now;
                 await _villaRepositorio.Actualizar(villa); //acutalizo y guardo

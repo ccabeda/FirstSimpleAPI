@@ -290,7 +290,6 @@ namespace MiPrimeraAPI.Service
                     return _apiResponse;
                 }
                 var token = GenerarTokendeLogin(user); //sino creo el token
-                _apiResponse.isExit = false;
                 _apiResponse.statusCode = HttpStatusCode.OK;
                 _apiResponse.token = token; //lo guardo en el api response
                 return _apiResponse;
